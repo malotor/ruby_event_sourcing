@@ -1,4 +1,5 @@
 require "bundler/setup"
+require "simplecov"
 require "event_sourcing"
 
 RSpec.configure do |config|
