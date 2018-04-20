@@ -8,4 +8,5 @@ COPY Gemfile /myapp/Gemfile
 COPY Gemfile.lock /myapp/Gemfile.lock
 RUN bundle install
 
-ENTRYPOINT ["/bin/bash", "/myapp/scripts/startup.sh"]
+#ENTRYPOINT ["/bin/bash", "/myapp/scripts/startup.sh"]
+CMD ["tail -f /dev/null"]

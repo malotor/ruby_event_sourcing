@@ -4,6 +4,7 @@ services:
     build: ./
     volumes:
       - ./:/myapp
+    command: tail -f /dev/null
   queue:
     image: rabbitmq:3.7-rc-management-alpine
     ports:

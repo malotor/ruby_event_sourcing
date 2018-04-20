@@ -11,7 +11,7 @@ module EventSourcing
       @@subscribers << subscriber
     end
 
-    def self.delete_subscriber(subscripber)
+    def self.delete_subscriber(subscriber)
       @@subscribers.delete(subscriber)
     end
 
@@ -28,6 +28,7 @@ module EventSourcing
   module AggregateRoot
 
     attr_reader :aggregate_id
+    attr_reader :events
 
     def initialize(args)
       @events = []

@@ -1,6 +1,6 @@
 class EmployeeSubscriber
 
-  def is_subscribet_to?(event)
+  def (event)
     raise StandardError "Method not implemented"
   end
 
