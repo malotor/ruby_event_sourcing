@@ -1,7 +1,7 @@
-require_relative 'lib/event_sourcing'
-require_relative 'model/employee_events'
-require_relative 'model/employee_subscribers'
-require_relative 'model/employee'
+require_relative '../lib/event_sourcing'
+require_relative 'employee_events'
+require_relative 'employee_subscribers'
+require_relative 'employee'
 
 EventSourcing::EventPublisher.add_subscriber(CongratulateEmployeeSubscriber.new)
 

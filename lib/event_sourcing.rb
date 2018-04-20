@@ -1,19 +1,17 @@
-require "facets"
+require 'event_sourcing/version'
 require 'securerandom'
+require 'facets'
 
 module EventSourcing
-
   class Event
     attr_reader :occurred_on
 
     def initialize
       @occurred_on ||= Time.new
     end
-
   end
 
   class StreamEvents < Array
-
     attr_reader :aggregate_id
 
     def initialize(aggregate_id)
@@ -21,20 +19,18 @@ module EventSourcing
     end
 
     def get_aggregate
-      aggregate = get_aggregate_class.create_from_agrregate_id  @aggregate_id
-      self.each { |event| aggregate.apply_record_event event }
-      return aggregate
+      aggregate = get_aggregate_class.create_from_agrregate_id @aggregate_id
+      each { |event| aggregate.apply_record_event event }
+      aggregate
     end
 
     def get_aggregate_class
-      raise StandarError("Method must be implemented") 
+      raise StandarError('Method must be implemented')
     end
-
   end
 
   module EventPublisher
-
-    @@subscribers=[]
+    @@subscribers = []
 
     def self.add_subscriber(subscriber)
       @@subscribers << subscriber
@@ -51,11 +47,9 @@ module EventSourcing
     def self.publish(event)
       @@subscribers.each { |subscriber| subscriber.handle(event) if subscriber.is_subscribet_to? event }
     end
-
   end
 
   module AggregateRoot
-
     def self.included(o)
       o.extend(ClassMethods)
     end
@@ -63,19 +57,18 @@ module EventSourcing
     attr_accessor :aggregate_id
     attr_reader :events
 
-    def initialize(args = nil)
+    def initialize(_args = nil)
       @events = []
       @aggregate_id ||= SecureRandom.uuid
     end
 
-
     def have_changed?
-      ( @events.count > 0 )
+      (@events.count > 0)
     end
 
-    def publish_events(&block)
+    def publish_events
       @events.each do |event|
-        block.call(event)
+        yield(event)
       end
       clear_events
     end
@@ -85,34 +78,27 @@ module EventSourcing
       record_event event
     end
 
-
-
     private
-      def record_event(event)
-        @events << event
-      end
 
-      def clear_events
-        @events = []
-      end
+    def record_event(event)
+      @events << event
+    end
 
-      def apply_event(event)
-        method = "apply_" + event.class.name.snakecase
-        self.send(method, event)
-      end
+    def clear_events
+      @events = []
+    end
+
+    def apply_event(event)
+      method = 'apply_' + event.class.name.snakecase
+      send(method, event)
+    end
 
     module ClassMethods
       def create_from_agrregate_id(id)
         aggregate = new
         aggregate.aggregate_id = id
-        return aggregate
+        aggregate
       end
     end
-
-
   end
-
-
-
-
 end

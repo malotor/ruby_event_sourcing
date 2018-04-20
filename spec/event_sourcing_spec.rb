@@ -1,4 +1,4 @@
-RSpec.describe EventSourcing::AggregateRoot do
+RSpec.describe EventSourcing do
   class DummyStreamEvents < EventSourcing::StreamEvents
     def get_aggregate_class
       DummyClass
@@ -54,6 +54,10 @@ RSpec.describe EventSourcing::AggregateRoot do
   def validate_uuid_format(uuid)
     uuid_regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
     uuid_regex =~ uuid.to_s.downcase
+  end
+
+  it 'has a version number' do
+    expect(EventSourcing::VERSION).not_to be nil
   end
 
   it 'have a UUID aggregate Id ' do
