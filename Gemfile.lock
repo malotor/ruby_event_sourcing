@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    event_sourcing (0.1.0)
+    simple_event_sourcing (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -35,10 +35,10 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.16)
-  event_sourcing!
   facets
   rake (~> 10.0)
   rspec (~> 3.0)
+  simple_event_sourcing!
   simplecov
 
 BUNDLED WITH

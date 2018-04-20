@@ -1,11 +1,11 @@
-RSpec.describe EventSourcing do
-  class DummyStreamEvents < EventSourcing::StreamEvents
+RSpec.describe SimpleEventSourcing do
+  class DummyStreamEvents < SimpleEventSourcing::StreamEvents
     def get_aggregate_class
       DummyClass
     end
   end
 
-  class DummyEvent < EventSourcing::Event
+  class DummyEvent < SimpleEventSourcing::Event
     attr_reader :aggregate_id, :a_new_value
 
     def initialize(aggregate_id, a_new_value)
@@ -16,7 +16,7 @@ RSpec.describe EventSourcing do
   end
 
   class DummyClass
-    include EventSourcing::AggregateRoot
+    include SimpleEventSourcing::AggregateRoot
 
     attr_accessor :a_field
 
@@ -33,7 +33,7 @@ RSpec.describe EventSourcing do
     end
 
     def publish
-      publish_events { |event| EventSourcing::EventPublisher.publish(event) }
+      publish_events { |event| SimpleEventSourcing::EventPublisher.publish(event) }
     end
   end
 
@@ -44,11 +44,11 @@ RSpec.describe EventSourcing do
 
     allow(spy_subscriber).to receive(:handle)
     allow(spy_subscriber).to receive(:is_subscribet_to?).and_return(true)
-    EventSourcing::EventPublisher.add_subscriber(spy_subscriber)
+    SimpleEventSourcing::EventPublisher.add_subscriber(spy_subscriber)
   end
 
   after(:each) do
-    EventSourcing::EventPublisher.delete_subscriber(spy_subscriber)
+    SimpleEventSourcing::EventPublisher.delete_subscriber(spy_subscriber)
   end
 
   def validate_uuid_format(uuid)
@@ -57,7 +57,7 @@ RSpec.describe EventSourcing do
   end
 
   it 'has a version number' do
-    expect(EventSourcing::VERSION).not_to be nil
+    expect(SimpleEventSourcing::VERSION).not_to be nil
   end
 
   it 'have a UUID aggregate Id ' do

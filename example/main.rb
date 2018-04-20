@@ -1,9 +1,9 @@
-require_relative '../lib/event_sourcing'
+require_relative '../lib/simple_event_sourcing'
 require_relative 'employee_events'
 require_relative 'employee_subscribers'
 require_relative 'employee'
 
-EventSourcing::EventPublisher.add_subscriber(CongratulateEmployeeSubscriber.new)
+SimpleEventSourcing::EventPublisher.add_subscriber(CongratulateEmployeeSubscriber.new)
 
 fred = Employee.new(name: "Fred Flintstone", title: "Crane Operator", salary: 30000.0)
 fred.salary=35000.0

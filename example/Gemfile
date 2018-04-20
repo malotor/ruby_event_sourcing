@@ -1,1 +1,1 @@
-gem "event_sourcing", :git => "https://github.com/malotor/ruby_event_sourcing.git"
+gem "simple_event_sourcing", :git => "https://github.com/malotor/ruby_event_sourcing.git"

@@ -1,11 +1,11 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "event_sourcing/version"
+require "simple_event_sourcing/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "event_sourcing"
-  spec.version       = EventSourcing::VERSION
+  spec.name          = "simple_event_sourcing"
+  spec.version       = SimpleEventSourcing::VERSION
   spec.authors       = ["Manel"]
   spec.email         = ["malotor@gmail.com"]
 

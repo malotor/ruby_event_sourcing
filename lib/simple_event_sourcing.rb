@@ -1,8 +1,8 @@
-require 'event_sourcing/version'
+require 'simple_event_sourcing/version'
 require 'securerandom'
 require 'facets'
 
-module EventSourcing
+module SimpleEventSourcing
   class Event
     attr_reader :occurred_on
 
@@ -25,7 +25,7 @@ module EventSourcing
     end
 
     def get_aggregate_class
-      raise StandarError('Method must be implemented')
+      raise StandardError('Method must be implemented')
     end
   end
 

@@ -1,6 +1,6 @@
 require "bundler/setup"
 require "simplecov"
-require "event_sourcing"
+require "simple_event_sourcing"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
