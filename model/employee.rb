@@ -6,16 +6,8 @@ class EmployeeStreamEvents < EventSourcing::StreamEvents
   end
 end
 
-class Event
-  attr_reader :occurred_on
 
-  def initialize
-    @occurred_on ||= Time.new
-  end
-
-end
-
-class NewEmployeeIsHiredEvent < Event
+class NewEmployeeIsHiredEvent < EventSourcing::Event
   attr_reader :name, :title,:salary
 
   def initialize(aggregate_id, name, title, salary)
@@ -27,7 +19,7 @@ class NewEmployeeIsHiredEvent < Event
   end
 end
 
-class SalaryHasChangedEvent < Event
+class SalaryHasChangedEvent < EventSourcing::Event
   attr_reader :aggregate_id, :new_salary
 
   def initialize(aggregate_id, new_salary)
@@ -65,5 +57,9 @@ class Employee
     @salary = event.new_salary
   end
 
+  def save
+    # Persist the entity
+    publish_events { |event| EventSourcing::EventPublisher.publish(event) }
+  end
 
 end

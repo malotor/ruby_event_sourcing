@@ -3,6 +3,35 @@ require 'securerandom'
 
 module EventSourcing
 
+  class Event
+    attr_reader :occurred_on
+
+    def initialize
+      @occurred_on ||= Time.new
+    end
+
+  end
+
+  class StreamEvents < Array
+
+    attr_reader :aggregate_id
+
+    def initialize(aggregate_id)
+      @aggregate_id = aggregate_id
+    end
+
+    def get_aggregate
+      aggregate = get_aggregate_class.create_from_agrregate_id  @aggregate_id
+      self.each { |event| aggregate.apply_record_event event }
+      return aggregate
+    end
+
+    def get_aggregate_class
+      raise StandarError("Method must be implemented") 
+    end
+
+  end
+
   module EventPublisher
 
     @@subscribers=[]
@@ -34,19 +63,19 @@ module EventSourcing
     attr_accessor :aggregate_id
     attr_reader :events
 
-    def initialize(args)
+    def initialize(args = nil)
       @events = []
       @aggregate_id ||= SecureRandom.uuid
     end
 
-    def save
-      # Persist the entity
-      publish_events
+
+    def have_changed?
+      ( @events.count > 0 )
     end
 
-    def publish_events()
+    def publish_events(&block)
       @events.each do |event|
-        EventSourcing::EventPublisher.publish(event)
+        block.call(event)
       end
       clear_events
     end
@@ -83,21 +112,7 @@ module EventSourcing
 
   end
 
-  class StreamEvents < Array
 
-    attr_reader :aggregate_id
-
-    def initialize(aggregate_id)
-      @aggregate_id = aggregate_id
-    end
-
-    def get_aggregate
-      aggregate = get_aggregate_class.create_from_agrregate_id  @aggregate_id
-      self.each { |event| aggregate.apply_record_event event }
-      return aggregate
-    end
-
-  end
 
 
 end
