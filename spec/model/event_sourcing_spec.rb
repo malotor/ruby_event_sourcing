@@ -1,38 +1,38 @@
 RSpec.describe EventSourcing::AggregateRoot do
-
-  class DummyStreamEvents < EventSourcing::StreamEvents
-    def get_aggregate_class
-      Dummy
-    end
-  end
-
-  class DummyEvent < EventSourcing::Event
-
-    attr_reader :aggregate_id, :a_new_value
-
-    def initialize(aggregate_id, a_new_value)
-      @aggregate_id = aggregate_id
-      @a_new_value = a_new_value
-      super()
-    end
-  end
-
-  class DummyClass
-    include EventSourcing::AggregateRoot
-
-    attr_accessor :a_field
-
-    def a_field
-      @a_field || :dummy_default_value
+    class DummyStreamEvents < EventSourcing::StreamEvents
+      def get_aggregate_class
+        DummyClass
+      end
     end
 
-    def a_method(a_value)
-      apply_record_event DummyEvent.new(aggregate_id,a_value)
+    class DummyEvent < EventSourcing::Event
+
+      attr_reader :aggregate_id, :a_new_value
+
+      def initialize(aggregate_id, a_new_value)
+        @aggregate_id = aggregate_id
+        @a_new_value = a_new_value
+        super()
+      end
     end
-    def apply_dummy_event(event)
-      @a_field = event.a_new_value
+
+    class DummyClass
+      include EventSourcing::AggregateRoot
+
+      attr_accessor :a_field
+
+      def a_field
+        @a_field || :dummy_default_value
+      end
+
+      def a_method(a_value)
+        apply_record_event DummyEvent.new(aggregate_id,a_value)
+      end
+      def apply_dummy_event(event)
+        @a_field = event.a_new_value
+      end
     end
-  end
+  
 
   let(:spy_subscriber) { spy(:spy_subscriber) }
 
