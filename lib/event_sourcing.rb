@@ -27,7 +27,11 @@ module EventSourcing
 
   module AggregateRoot
 
-    attr_reader :aggregate_id
+    def self.included(o)
+      o.extend(ClassMethods)
+    end
+
+    attr_accessor :aggregate_id
     attr_reader :events
 
     def initialize(args)
@@ -38,14 +42,21 @@ module EventSourcing
     def save
       # Persist the entity
       publish_events
-      clear_events
     end
 
     def publish_events()
       @events.each do |event|
         EventSourcing::EventPublisher.publish(event)
       end
+      clear_events
     end
+
+    def apply_record_event(event)
+      apply_event event
+      record_event event
+    end
+
+
 
     private
       def record_event(event)
@@ -61,11 +72,32 @@ module EventSourcing
         self.send(method, event)
       end
 
-      def apply_record_event(event)
-        apply_event event
-        record_event event
+    module ClassMethods
+      def create_from_agrregate_id(id)
+        aggregate = new
+        aggregate.aggregate_id = id
+        return aggregate
       end
+    end
+
 
   end
+
+  class StreamEvents < Array
+
+    attr_reader :aggregate_id
+
+    def initialize(aggregate_id)
+      @aggregate_id = aggregate_id
+    end
+
+    def get_aggregate
+      aggregate = get_aggregate_class.create_from_agrregate_id  @aggregate_id
+      self.each { |event| aggregate.apply_record_event event }
+      return aggregate
+    end
+
+  end
+
 
 end

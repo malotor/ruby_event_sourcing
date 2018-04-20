@@ -52,4 +52,19 @@ RSpec.describe Employee do
     expect(spy_subscriber).to have_received(:handle)
   end
 
+  example "is reconstructed by a stream events" do
+
+    aggregate_id = "an_aggregate_id"
+    stream_events = EmployeeStreamEvents.new(aggregate_id)
+    stream_events << NewEmployeeIsHiredEvent.new(aggregate_id, "Fred Flintstone", "Crane Operator", 30000.0)
+    stream_events << SalaryHasChangedEvent.new(aggregate_id, 45000.0)
+
+    employee = stream_events.get_aggregate
+    expect(employee.aggregate_id).to eq(aggregate_id)
+    expect(employee.name).to eq("Fred Flintstone")
+    expect(employee.title).to eq("Crane Operator")
+    expect(employee.salary).to eq(45000.0)
+
+  end
+
 end

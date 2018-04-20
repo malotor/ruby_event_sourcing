@@ -1,5 +1,11 @@
 require_relative '../lib/event_sourcing'
 
+class EmployeeStreamEvents < EventSourcing::StreamEvents
+  def get_aggregate_class
+    Employee
+  end
+end
+
 class Event
   attr_reader :occurred_on
 
@@ -22,8 +28,7 @@ class NewEmployeeIsHiredEvent < Event
 end
 
 class SalaryHasChangedEvent < Event
-  attr_reader :aggregate_id
-  attr_reader :new_salary
+  attr_reader :aggregate_id, :new_salary
 
   def initialize(aggregate_id, new_salary)
     @aggregate_id = aggregate_id
@@ -37,12 +42,13 @@ class Employee
 
   include EventSourcing::AggregateRoot
 
-  attr_reader :name, :title
-  attr_reader :salary
+  attr_reader :name, :title, :salary
 
-  def initialize(args)
+  def initialize(args = nil )
     super
-    apply_record_event  NewEmployeeIsHiredEvent.new(@aggregate_id, args[:name], args[:title], args[:salary] )
+    unless args.nil?
+      apply_record_event  NewEmployeeIsHiredEvent.new(@aggregate_id, args[:name], args[:title], args[:salary] )
+    end
   end
 
   def salary=(new_salary)
@@ -58,5 +64,6 @@ class Employee
   def apply_salary_has_changed_event(event)
     @salary = event.new_salary
   end
+
 
 end
