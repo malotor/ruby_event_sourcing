@@ -26,6 +26,18 @@ module SimpleEventSourcing
     end
   end
 
+  class EventSubscriber
+
+    def (event)
+      raise StandardError "Method not implemented"
+    end
+
+    def handle(event)
+      raise StandardError "Method not implemented"
+    end
+  end
+
+
   module EventPublisher
     @@subscribers = []
 

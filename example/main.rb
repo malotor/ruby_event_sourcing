@@ -1,6 +1,4 @@
 require 'simple_event_sourcing'
-require_relative 'employee_events'
-require_relative 'employee_subscribers'
 require_relative 'employee'
 
 SimpleEventSourcing::EventPublisher.add_subscriber(CongratulateEmployeeSubscriber.new)

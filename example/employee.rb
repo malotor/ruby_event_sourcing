@@ -29,6 +29,18 @@ class SalaryHasChangedEvent < SimpleEventSourcing::Event
   end
 end
 
+class CongratulateEmployeeSubscriber < SimpleEventSourcing::EventSubscriber
+
+  def is_subscribet_to?(event)
+    event.class == SalaryHasChangedEvent
+  end
+
+  def handle(event)
+    puts "Cogratulations for your new salary => #{event.new_salary}!!!!"
+  end
+
+end
+
 
 class Employee
 
