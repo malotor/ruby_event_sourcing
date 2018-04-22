@@ -1,4 +1,4 @@
-require_relative '../lib/simple_event_sourcing'
+require 'simple_event_sourcing'
 require_relative 'employee_events'
 require_relative 'employee_subscribers'
 require_relative 'employee'

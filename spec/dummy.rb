@@ -15,7 +15,9 @@ class DummyEvent < SimpleEventSourcing::Event
 end
 
 class DummyClass
+
   include SimpleEventSourcing::AggregateRoot
+
 
   attr_accessor :a_field
 
@@ -27,8 +29,12 @@ class DummyClass
     apply_record_event DummyEvent.new(aggregate_id, a_value)
   end
 
-  def apply_dummy_event(event)
-    @a_field = event.a_new_value
+  # def apply_dummy_event(event)
+  #   @a_field = event.a_new_value
+  # end
+
+  on DummyEvent do |event|
+      @a_field = event.a_new_value
   end
 
   def publish

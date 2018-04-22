@@ -47,13 +47,13 @@ class Employee
     apply_record_event SalaryHasChangedEvent.new(@aggregate_id, new_salary)
   end
 
-  def apply_new_employee_is_hired_event(event)
+  on NewEmployeeIsHiredEvent do |event|
     @name = event.name
     @title = event.title
     @salary = event.salary
   end
 
-  def apply_salary_has_changed_event(event)
+  on SalaryHasChangedEvent do |event|
     @salary = event.new_salary
   end
 

@@ -1,6 +1,8 @@
 require 'securerandom'
 require 'facets'
 
+require_relative 'self_applier'
+
 module SimpleEventSourcing
   module AggregateRoot
 
@@ -24,7 +26,7 @@ module SimpleEventSourcing
     end
 
     def apply_record_event(event)
-      apply_event event
+      handle_message(event)
       record_event event
     end
 
@@ -51,8 +53,9 @@ module SimpleEventSourcing
       end
 
       def apply_event(event)
-        method = 'apply_' + event.class.name.snakecase
-        send(method, event)
+        handle_message(event)
+        #method = 'apply_' + event.class.name.snakecase
+        #send(method, event)
       end
 
   end

@@ -6,12 +6,12 @@ require "simple_event_sourcing/version"
 Gem::Specification.new do |spec|
   spec.name          = "simple_event_sourcing"
   spec.version       = SimpleEventSourcing::VERSION
-  spec.authors       = ["Manel"]
+  spec.authors       = ["Manuel López Torrent"]
   spec.email         = ["malotor@gmail.com"]
 
-  spec.summary       = %q{Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{Write a longer description or delete this line.}
-  spec.homepage      = "https://github.com/malotor"
+  spec.summary       = %q{This gem provides a simple way for add events sourcing related behaviour to your models class}
+  spec.description   = %q{This gem provides a simple way for add events sourcing related behaviour to your models class}
+  spec.homepage      = "https://github.com/malotor/ruby_event_sourcing"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

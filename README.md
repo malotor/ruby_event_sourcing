@@ -51,13 +51,13 @@ class Employee
     apply_record_event SalaryHasChangedEvent.new(@aggregate_id, new_salary)
   end
 
-  def apply_new_employee_is_hired_event(event)
+  on NewEmployeeIsHiredEvent do |event|
     @name = event.name
     @title = event.title
     @salary = event.salary
   end
 
-  def apply_salary_has_changed_event(event)
+  on SalaryHasChangedEvent do |event|
     @salary = event.new_salary
   end
 
@@ -69,19 +69,13 @@ class Employee
 end
 ```
 
-Firts you mus add behaviour including the AggregateRoot module
+First, you must add behaviour including the AggregateRoot module
 
 ```ruby
   include SimpleEventSourcing::AggregateRoot
 ```
 
-After that all domain event must be applied and recorded
-
-```ruby
-apply_record_event SalaryHasChangedEvent.new(@aggregate_id, new_salary)
-```
-
-You must create your own events and a event stream
+You must create your own domain events and a event stream
 
 ```ruby
 class EmployeeStreamEvents < SimpleEventSourcing::StreamEvents
@@ -100,6 +94,22 @@ class SalaryHasChangedEvent < SimpleEventSourcing::Event
   end
 end
 ```
+
+After that all domain event must be applied and recorded
+
+```ruby
+apply_record_event SalaryHasChangedEvent.new(@aggregate_id, new_salary)
+```
+
+SimpleEventSourcing provides a DSL to handle the applied events. You must provide a handler for each event
+
+```ruby
+on SalaryHasChangedEvent do |event|
+  @salary = event.new_salary
+end
+```
+
+
 
 Once you persist the entity you must publish all recorded events.
 
