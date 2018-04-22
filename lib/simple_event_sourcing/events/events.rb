@@ -1,10 +1,10 @@
 module SimpleEventSourcing
 
   class Event
-    attr_reader :occurred_on
+    attr_reader :occured_on
 
     def initialize
-      @occurred_on ||= Time.new
+      @occured_on ||= Time.new
     end
   end
 
