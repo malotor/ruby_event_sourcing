@@ -1,8 +1,17 @@
 # EventSourcing
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/simple_event_sourcing`. To experiment with that code, run `bin/console` for an interactive prompt.
+The fundamental idea of Event Sourcing is that of ensuring every change to the state of an application is captured in an event object, and that these event objects are themselves stored in the sequence they were applied for the same lifetime as the application state itself.
 
-TODO: Delete this and the text above, and describe your gem
+Martin Fowler , https://martinfowler.com/eaaDev/EventSourcing.html
+
+This gem provides a simple way for add events sourcing related behaviour to your models class.
+
+Base classes
+
+- AggregateRoot
+- Event
+- EventStream
+- EventPublisher
 
 ## Installation
 
@@ -22,13 +31,86 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Here an example of use:
 
-## Development
+```ruby
+class Employee
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+  include SimpleEventSourcing::AggregateRoot
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+  attr_reader :name, :title, :salary
+
+  def initialize(args = nil )
+    super
+    unless args.nil?
+      apply_record_event  NewEmployeeIsHiredEvent.new(@aggregate_id, args[:name], args[:title], args[:salary] )
+    end
+  end
+
+  def salary=(new_salary)
+    apply_record_event SalaryHasChangedEvent.new(@aggregate_id, new_salary)
+  end
+
+  def apply_new_employee_is_hired_event(event)
+    @name = event.name
+    @title = event.title
+    @salary = event.salary
+  end
+
+  def apply_salary_has_changed_event(event)
+    @salary = event.new_salary
+  end
+
+  def save
+    # Persist the entity
+    publish_events { |event| SimpleEventSourcing::EventPublisher.publish(event) }
+  end
+
+end
+```
+
+Firts you mus add behaviour including the AggregateRoot module
+
+```ruby
+  include SimpleEventSourcing::AggregateRoot
+```
+
+After that all domain event must be applied and recorded
+
+```ruby
+apply_record_event SalaryHasChangedEvent.new(@aggregate_id, new_salary)
+```
+
+You must create your own events and a event stream
+
+```ruby
+class EmployeeStreamEvents < SimpleEventSourcing::StreamEvents
+  def get_aggregate_class
+    Employee
+  end
+end
+
+class SalaryHasChangedEvent < SimpleEventSourcing::Event
+  attr_reader :aggregate_id, :new_salary
+
+  def initialize(aggregate_id, new_salary)
+    @aggregate_id = aggregate_id
+    @new_salary = new_salary
+    super()
+  end
+end
+```
+
+Once you persist the entity you must publish all recorded events.
+
+```ruby
+  def save
+    # Persist the entity
+    publish_events { |event| SimpleEventSourcing::EventPublisher.publish(event) }
+  end
+```
+
+Happy coding!
 
 ## Contributing
 
