@@ -28,7 +28,7 @@ module SimpleEventSourcing
 
   class EventSubscriber
 
-    def (event)
+    def is_subscribet_to?(event)
       raise StandardError "Method not implemented"
     end
 
