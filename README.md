@@ -64,7 +64,7 @@ class Employee
 
   def save
     # Persist the entity
-    publish_events { |event| SimpleEventSourcing::EventDispatcher.publish(event) }
+    publish_events { |event| SimpleEventSourcing::Events::EventDispatcher.publish(event) }
   end
 
 end
@@ -79,7 +79,7 @@ First, you must add behaviour including the AggregateRoot module
 You must create your own domain events and a event stream
 
 ```ruby
-class EmployeeStreamEvents < SimpleEventSourcing::StreamEvents
+class EmployeeStreamEvents < SimpleEventSourcing::AggregateRoot::History
   def get_aggregate_class
     Employee
   end
@@ -109,8 +109,6 @@ on SalaryHasChangedEvent do |event|
   @salary = event.new_salary
 end
 ```
-
-
 
 Once you persist the entity you must publish all recorded events.
 

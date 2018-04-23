@@ -1,6 +1,6 @@
 require_relative '../lib/simple_event_sourcing'
 
-class EmployeeStreamEvents < SimpleEventSourcing::Events::StreamEvents
+class EmployeeStreamEvents < SimpleEventSourcing::AggregateRoot::History
   def get_aggregate_class
     Employee
   end
