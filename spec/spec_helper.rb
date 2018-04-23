@@ -2,6 +2,7 @@ require "bundler/setup"
 require "simplecov"
 require "simple_event_sourcing"
 require "helpers/uuid_helper"
+require "support/dummy"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

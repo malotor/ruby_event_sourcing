@@ -1,6 +1,5 @@
 RSpec.describe SimpleEventSourcing::AggregateRoot::Base do
 
-  require_relative '../dummy'
 
   let(:spy_subscriber) { spy(:spy_subscriber) }
 
