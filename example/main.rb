@@ -1,7 +1,7 @@
 require 'simple_event_sourcing'
 require_relative 'employee'
 
-SimpleEventSourcing::EventPublisher.add_subscriber(CongratulateEmployeeSubscriber.new)
+SimpleEventSourcing::EventDispatcher.add_subscriber(CongratulateEmployeeSubscriber.new)
 
 fred = Employee.new(name: "Fred Flintstone", title: "Crane Operator", salary: 30000.0)
 fred.salary=35000.0

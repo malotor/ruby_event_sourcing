@@ -9,9 +9,10 @@ This gem provides a simple way for add events sourcing related behaviour to your
 Base classes
 
 - AggregateRoot
+- UUID Id
 - Event
 - EventStream
-- EventPublisher
+- EventDispatcher
 
 ## Installation
 
@@ -63,7 +64,7 @@ class Employee
 
   def save
     # Persist the entity
-    publish_events { |event| SimpleEventSourcing::EventPublisher.publish(event) }
+    publish_events { |event| SimpleEventSourcing::EventDispatcher.publish(event) }
   end
 
 end
@@ -116,7 +117,7 @@ Once you persist the entity you must publish all recorded events.
 ```ruby
   def save
     # Persist the entity
-    publish_events { |event| SimpleEventSourcing::EventPublisher.publish(event) }
+    publish_events { |event| SimpleEventSourcing::EventDispatcher.publish(event) }
   end
 ```
 

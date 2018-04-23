@@ -71,7 +71,7 @@ class Employee
 
   def save
     # Persist the entity
-    publish_events { |event| SimpleEventSourcing::Events::EventPublisher.publish(event) }
+    publish_events { |event| SimpleEventSourcing::Events::EventDispatcher.publish(event) }
   end
 
 end

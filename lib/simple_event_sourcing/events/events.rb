@@ -39,7 +39,7 @@ module SimpleEventSourcing
     end
 
 
-    module EventPublisher
+    module EventDispatcher
       @@subscribers = []
 
       def self.add_subscriber(subscriber)

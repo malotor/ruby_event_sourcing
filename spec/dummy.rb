@@ -38,6 +38,6 @@ class DummyClass
   end
 
   def publish
-    publish_events { |event| SimpleEventSourcing::Events::EventPublisher.publish(event) }
+    publish_events { |event| SimpleEventSourcing::Events::EventDispatcher.publish(event) }
   end
 end
