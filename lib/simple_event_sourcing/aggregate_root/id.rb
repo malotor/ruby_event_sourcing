@@ -1,76 +1,54 @@
+require 'securerandom'
 
 module SimpleEventSourcing
-  module AggregateRoot
 
-    module Base
+  module Id
 
-      attr_accessor :aggregate_id
-      attr_reader :events
-
-      def initialize(_args = nil)
-        @events = []
-        @aggregate_id ||= SimpleEventSourcing::Id::UUIDId.generate
+    class BaseId
+      def initialize(value)
+        @value = value
       end
 
-      def have_changed?
-        (@events.count > 0)
+      def id
+        @value
       end
 
-      def publish_events
-        @events.each do |event|
-          yield(event)
-        end
-        clear_events
+      def to_s
+        @value
       end
 
-      def apply_record_event(event)
-        handle_message(event)
-        record_event event
+      def ==(other_id)
+        self.class == other_id.class && @value == other_id.id
       end
 
-      def handle_message(message)
-        handler = self.class.message_mapping[message.class]
-        self.instance_exec(message, &handler) if handler
+      alias eql? ==
+
+    end
+
+    class UUIDId < BaseId
+      def initialize(value)
+        raise UUIDValidationError unless valid? value
+        super(value)
       end
 
-      def self.included(o)
-        o.extend(ClassMethods)
-      end
-
-      module ClassMethods
-        def create_from_agrregate_id(id)
-          aggregate = new
-          aggregate.aggregate_id = id
-          aggregate
-        end
-        def on(*message_classes, &block)
-          message_classes.each { |message_class| message_mapping[message_class] = block }
-        end
-
-        def message_mapping
-          @message_mapping ||= {}
-        end
-
-        def handles_message?(message)
-          message_mapping.keys.include? message.class
-        end
+      def self.generate
+        new SecureRandom.uuid
       end
 
       private
 
-        def record_event(event)
-          @events << event
-        end
-
-        def clear_events
-          @events = []
-        end
-
-        def apply_event(event)
-          handle_message(event)
-          #method = 'apply_' + event.class.name.snakecase
-          #send(method, event)
+        def valid?(uuid)
+          uuid_regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+          return true if uuid_regex =~ uuid.to_s.downcase
+          return false
         end
     end
+
+    class UUIDValidationError < StandardError
+      def initialize(msg="Value is not a valid UUID")
+        super
+      end
+    end
+
   end
 end

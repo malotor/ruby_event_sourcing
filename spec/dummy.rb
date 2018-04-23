@@ -1,10 +1,10 @@
-class DummyStreamEvents < SimpleEventSourcing::StreamEvents
+class DummyStreamEvents < SimpleEventSourcing::Events::StreamEvents
   def get_aggregate_class
     DummyClass
   end
 end
 
-class DummyEvent < SimpleEventSourcing::Event
+class DummyEvent < SimpleEventSourcing::Events::Event
   attr_reader :aggregate_id, :a_new_value
 
   def initialize(aggregate_id, a_new_value)
@@ -38,6 +38,6 @@ class DummyClass
   end
 
   def publish
-    publish_events { |event| SimpleEventSourcing::EventPublisher.publish(event) }
+    publish_events { |event| SimpleEventSourcing::Events::EventPublisher.publish(event) }
   end
 end

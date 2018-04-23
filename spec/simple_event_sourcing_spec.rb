@@ -9,11 +9,11 @@ RSpec.describe SimpleEventSourcing do
 
     allow(spy_subscriber).to receive(:handle)
     allow(spy_subscriber).to receive(:is_subscribet_to?).and_return(true)
-    SimpleEventSourcing::EventPublisher.add_subscriber(spy_subscriber)
+    SimpleEventSourcing::Events::EventPublisher.add_subscriber(spy_subscriber)
   end
 
   after(:each) do
-    SimpleEventSourcing::EventPublisher.delete_subscriber(spy_subscriber)
+    SimpleEventSourcing::Events::EventPublisher.delete_subscriber(spy_subscriber)
   end
 
   def validate_uuid_format(uuid)

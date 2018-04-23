@@ -1,13 +1,13 @@
 require_relative '../lib/simple_event_sourcing'
 
-class EmployeeStreamEvents < SimpleEventSourcing::StreamEvents
+class EmployeeStreamEvents < SimpleEventSourcing::Events::StreamEvents
   def get_aggregate_class
     Employee
   end
 end
 
 
-class NewEmployeeIsHiredEvent < SimpleEventSourcing::Event
+class NewEmployeeIsHiredEvent < SimpleEventSourcing::Events::Event
   attr_reader :name, :title,:salary
 
   def initialize(aggregate_id, name, title, salary)
@@ -19,7 +19,7 @@ class NewEmployeeIsHiredEvent < SimpleEventSourcing::Event
   end
 end
 
-class SalaryHasChangedEvent < SimpleEventSourcing::Event
+class SalaryHasChangedEvent < SimpleEventSourcing::Events::Event
   attr_reader :aggregate_id, :new_salary
 
   def initialize(aggregate_id, new_salary)
@@ -29,7 +29,7 @@ class SalaryHasChangedEvent < SimpleEventSourcing::Event
   end
 end
 
-class CongratulateEmployeeSubscriber < SimpleEventSourcing::EventSubscriber
+class CongratulateEmployeeSubscriber < SimpleEventSourcing::Events::EventSubscriber
 
   def is_subscribet_to?(event)
     event.class == SalaryHasChangedEvent
@@ -71,7 +71,7 @@ class Employee
 
   def save
     # Persist the entity
-    publish_events { |event| SimpleEventSourcing::EventPublisher.publish(event) }
+    publish_events { |event| SimpleEventSourcing::Events::EventPublisher.publish(event) }
   end
 
 end
