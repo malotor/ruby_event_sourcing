@@ -23,7 +23,7 @@ module SimpleEventSourcing
 
   class UUIDAggregateRootId < AggregateRootId
     def initialize(value)
-      throw AggregateRootIdError unless valid? value
+      raise AggregateRootIdValidationError unless valid? value
       super(value)
     end
 
@@ -33,11 +33,16 @@ module SimpleEventSourcing
 
     private
 
-    def valid?(uuid)
-      uuid_regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
-      uuid_regex =~ uuid.to_s.downcase
-    end
+      def valid?(uuid)
+        uuid_regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+        return true if uuid_regex =~ uuid.to_s.downcase
+        return false
+      end
   end
 
-  class AggregateRootIdError < StandardError; end
+  class AggregateRootIdValidationError < StandardError
+    def initialize(msg="Value is not a valid UUID")
+      super
+    end
+  end
 end

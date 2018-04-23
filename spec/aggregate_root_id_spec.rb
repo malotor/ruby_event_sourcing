@@ -1,5 +1,3 @@
-require 'facets'
-
 RSpec.describe 'Aggregate Root Id' do
   it 'is a valid UUID' do
     aggregate_id = SimpleEventSourcing::UUIDAggregateRootId.generate
@@ -13,6 +11,6 @@ RSpec.describe 'Aggregate Root Id' do
   end
 
   it 'is fails if  string is no valid  UUID' do
-    expect(SimpleEventSourcing::UUIDAggregateRootId.new('foo')).to raise_error(AggregateRootIdError)
+    expect { SimpleEventSourcing::UUIDAggregateRootId.new('foo') }.to raise_error(SimpleEventSourcing::AggregateRootIdValidationError)
   end
 end
