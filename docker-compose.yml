@@ -7,3 +7,17 @@ services:
     command: tail -f /dev/null
     environment:
       - LANG=C.UTF-8
+  redis:
+    container_name: redis
+    image: redis:3.2-alpine
+    hostname: redis
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    build: .
+    restart: always
+    environment:
+    - REDIS_HOSTS=local:redis:6379
+    ports:
+      - 8081:8081
