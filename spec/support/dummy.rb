@@ -1,4 +1,4 @@
-class DummyStreamEvents < SimpleEventSourcing::Events::StreamEvents
+class DummyStreamEvents < SimpleEventSourcing::AggregateRoot::History
   def get_aggregate_class
     DummyClass
   end
