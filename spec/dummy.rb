@@ -16,7 +16,7 @@ end
 
 class DummyClass
 
-  include SimpleEventSourcing::AggregateRoot
+  include SimpleEventSourcing::AggregateRoot::Base
 
 
   attr_accessor :a_field

@@ -57,7 +57,7 @@ RSpec.describe SimpleEventSourcing do
   end
 
   it 'is reconstructed by a stream events' do
-    aggregate_id = SimpleEventSourcing::UUIDAggregateRootId.new '4bb20d71-3002-42ea-9387-38d6838a2cb7'
+    aggregate_id = SimpleEventSourcing::Id::UUIDId.new '4bb20d71-3002-42ea-9387-38d6838a2cb7'
     stream_events = DummyStreamEvents.new(aggregate_id)
     stream_events << DummyEvent.new(aggregate_id, 10)
     stream_events << DummyEvent.new(aggregate_id, 20)

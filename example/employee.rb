@@ -44,7 +44,7 @@ end
 
 class Employee
 
-  include SimpleEventSourcing::AggregateRoot
+  include SimpleEventSourcing::AggregateRoot::Base
 
   attr_reader :name, :title, :salary
 
