@@ -15,10 +15,11 @@ module SimpleEventSourcing
     end
 
     def ==(other_id)
-      self.class == other_id.class &&
-        value == other_id.value
+      self.class == other_id.class && @value == other_id.id
     end
+
     alias eql? ==
+
   end
 
   class UUIDAggregateRootId < AggregateRootId
