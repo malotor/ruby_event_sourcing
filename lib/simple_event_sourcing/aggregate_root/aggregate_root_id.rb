@@ -1,6 +1,7 @@
 require 'securerandom'
 
 module SimpleEventSourcing
+  
   class AggregateRootId
     def initialize(value)
       @value = value

@@ -1,6 +1,3 @@
-require 'securerandom'
-require 'facets'
-
 require_relative 'self_applier'
 
 module SimpleEventSourcing
@@ -11,7 +8,7 @@ module SimpleEventSourcing
 
     def initialize(_args = nil)
       @events = []
-      @aggregate_id ||= SecureRandom.uuid
+      @aggregate_id ||= UUIDAggregateRootId.generate
     end
 
     def have_changed?
