@@ -14,6 +14,19 @@ class DummyEvent < SimpleEventSourcing::Events::Event
   end
 end
 
+class DummyEventSubscriber < SimpleEventSourcing::Events::EventSubscriber
+
+  def is_subscribet_to?(event)
+    puts event.class
+    event.class == DummyEvent
+  end
+
+  def handle_event(event)
+    puts "New value is {#{event.a_new_value}}"
+  end
+
+end
+
 class DummyClass
 
   include SimpleEventSourcing::AggregateRoot::Base
