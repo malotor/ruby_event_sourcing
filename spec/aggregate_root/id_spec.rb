@@ -1,4 +1,4 @@
-RSpec.describe 'Aggregate Root Id' do
+RSpec.describe SimpleEventSourcing::Id::UUIDId do
   it 'is a valid UUID' do
     aggregate_id = SimpleEventSourcing::Id::UUIDId.generate
     expect(uuid_valid?(aggregate_id.to_s)).not_to be nil
