@@ -1,17 +1,18 @@
 RSpec.describe SimpleEventSourcing::Events::EventDispatcher do
 
-  let(:spy_subscriber) { spy(:spy_subscriber) }
-  let(:spy_second_subscriber) { spy(:spy_second_subscriber) }
+  let(:spy_subscriber) { @subscribers[0] }
+  let(:spy_second_subscriber) { @subscribers[1] }
 
   before(:each) do
+    @subscribers << spy(:spy_subscriber)
+    @subscribers << spy(:spy_subscriber)
 
-    SimpleEventSourcing::Events::EventDispatcher.add_subscriber(spy_subscriber)
-    SimpleEventSourcing::Events::EventDispatcher.add_subscriber(spy_second_subscriber)
+    @subscribers.each do { |s| SimpleEventSourcing::Events::EventDispatcher.add_subscriber(s) }
+
   end
 
   after(:each) do
-    SimpleEventSourcing::Events::EventDispatcher.delete_subscriber(spy_subscriber)
-    SimpleEventSourcing::Events::EventDispatcher.delete_subscriber(spy_second_subscriber)
+    @subscribers.each do { |s| SimpleEventSourcing::Events::EventDispatcher.delete_subscriber(s) }
   end
 
   it 'dispath an event to all subscribers that are subscribed to that event class' do

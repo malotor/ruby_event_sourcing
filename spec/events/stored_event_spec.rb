@@ -26,4 +26,7 @@ RSpec.describe SimpleEventSourcing::Events::StoredEvent do
     expect(@stored_event.event_data).to eq('{"a_new_value":10}')
   end
 
+
+
+
 end
