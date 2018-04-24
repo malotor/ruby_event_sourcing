@@ -22,11 +22,6 @@ module SimpleEventSourcing
         clear_events
       end
 
-      def apply_record_event(event)
-        handle_message(event)
-        record_event event
-      end
-
       def handle_message(message)
         handler = self.class.message_mapping[message.class]
         self.instance_exec(message, &handler) if handler
@@ -37,11 +32,13 @@ module SimpleEventSourcing
       end
 
       module ClassMethods
+
         def create_from_agrregate_id(id)
           aggregate = new
           aggregate.aggregate_id = id
           aggregate
         end
+
         def on(*message_classes, &block)
           message_classes.each { |message_class| message_mapping[message_class] = block }
         end
@@ -57,6 +54,11 @@ module SimpleEventSourcing
 
       private
 
+        def apply_record_event(event)
+          handle_message(event)
+          record_event event
+        end
+
         def record_event(event)
           @events << event
         end
@@ -65,11 +67,7 @@ module SimpleEventSourcing
           @events = []
         end
 
-        def apply_event(event)
-          handle_message(event)
-          #method = 'apply_' + event.class.name.snakecase
-          #send(method, event)
-        end
+      
     end
   end
 end

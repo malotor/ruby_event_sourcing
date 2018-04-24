@@ -9,7 +9,7 @@ module SimpleEventSourcing
 
       def get_aggregate
         aggregate = get_aggregate_class.create_from_agrregate_id @aggregate_id
-        each { |event| aggregate.apply_record_event event }
+        each { |event| aggregate.handle_message event }
         aggregate
       end
 
