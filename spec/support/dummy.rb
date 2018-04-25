@@ -5,10 +5,11 @@ class DummyStreamEvents < SimpleEventSourcing::AggregateRoot::History
 end
 
 class DummyEvent < SimpleEventSourcing::Events::Event
-  attr_reader :a_new_value
+  attr_reader :a_new_value, :other_value
 
   def initialize(args)
     @a_new_value = args[:a_new_value]
+    @other_value = args[:other_value]
     super(args)
   end
 end
@@ -30,22 +31,20 @@ class DummyClass
   include SimpleEventSourcing::AggregateRoot::Base
 
 
-  attr_accessor :a_field
+  attr_accessor :a_field,:other_field
 
   def a_field
     @a_field || :dummy_default_value
   end
 
-  def a_method(a_value)
-    apply_record_event DummyEvent, a_new_value: a_value
+  def a_method(a_value, other_value)
+    apply_record_event DummyEvent, a_new_value: a_value, other_value: other_value
   end
 
-  # def apply_dummy_event(event)
-  #   @a_field = event.a_new_value
-  # end
-
   on DummyEvent do |event|
-      @a_field = event.a_new_value
+    puts event.inspect
+    @a_field = event.a_new_value
+    @other_field = event.other_value
   end
 
   def publish

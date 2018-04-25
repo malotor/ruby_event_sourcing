@@ -137,6 +137,8 @@ Once you persist the entity you must publish all recorded events.
   end
 ```
 
+You could see this example in https://github.com/malotor/simple_event_sourcing_example
+
 Happy coding!
 
 ## Contributing

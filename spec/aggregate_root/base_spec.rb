@@ -27,22 +27,36 @@ RSpec.describe SimpleEventSourcing::AggregateRoot::Base do
   end
 
   it 'applies and store events' do
-    @dummy_class.a_method(10)
+    @dummy_class.a_method(10,30)
+
 
     expect(@dummy_class.a_field).to eq(10)
+    expect(@dummy_class.other_field).to eq(30)
+
     expect(@dummy_class.have_changed?).to be true
     expect(@dummy_class.events.count).to eq(1)
   end
 
+  it 'applies and store events several times' do
+    @dummy_class.a_method(10,30)
+    @dummy_class.a_method(15,35)
+
+    expect(@dummy_class.a_field).to eq(15)
+    expect(@dummy_class.other_field).to eq(35)
+
+    expect(@dummy_class.have_changed?).to be true
+    expect(@dummy_class.events.count).to eq(2)
+  end
+
   it 'publish its stored events' do
-    @dummy_class.a_method(10)
+    @dummy_class.a_method(10,30)
     @dummy_class.publish
     expect(spy_subscriber).to have_received(:is_subscribet_to?)
     expect(spy_subscriber).to have_received(:handle)
   end
 
   it 'clears events after publish its' do
-    @dummy_class.a_method(10)
+    @dummy_class.a_method(10,30)
     @dummy_class.publish
     expect(@dummy_class.events.count).to eq(0)
   end
