@@ -1,13 +1,14 @@
 RSpec.describe SimpleEventSourcing::Events::EventSubscriber do
 
-  let(:dummy_event) { DummyEvent.new("an_id","a_value") }
-  let(:no_dummy_event)  do
-    Object.const_set("DinamicEvent", Class.new { })
-    DinamicEvent.new
-  end
+  let(:dummy_event) { @event }
+  let(:no_dummy_event) { @other_event }
+
+  Object.const_set("DinamicEvent", Class.new { })
 
   before(:each) do
     @subscriber = DummyEventSubscriber.new
+    @event =  DummyEvent.new("an_id","a_value")
+    @other_event =  DinamicEvent.new
   end
 
   it 'is subscribed to especific class of event' do

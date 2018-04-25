@@ -17,7 +17,6 @@ end
 class DummyEventSubscriber < SimpleEventSourcing::Events::EventSubscriber
 
   def is_subscribet_to?(event)
-    puts event.class
     event.class == DummyEvent
   end
 
