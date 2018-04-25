@@ -54,7 +54,9 @@ module SimpleEventSourcing
 
       private
 
-        def apply_record_event(event)
+        def apply_record_event(event_class, args = {})
+          args[:aggregate_id] ||= aggregate_id
+          event = event_class.new(args)
           handle_message(event)
           record_event event
         end
@@ -67,7 +69,7 @@ module SimpleEventSourcing
           @events = []
         end
 
-      
+
     end
   end
 end

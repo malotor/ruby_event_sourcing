@@ -7,7 +7,7 @@ RSpec.describe SimpleEventSourcing::Events::EventSubscriber do
 
   before(:each) do
     @subscriber = DummyEventSubscriber.new
-    @event =  DummyEvent.new("an_id","a_value")
+    @event =  DummyEvent.new(aggregate_id: "an_id",a_new_value: "a_value")
     @other_event =  DinamicEvent.new
   end
 

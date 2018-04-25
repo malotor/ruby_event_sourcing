@@ -23,7 +23,7 @@ RSpec.describe SimpleEventSourcing::Events::EventDispatcher do
 
     allow(spy_second_subscriber).to receive(:is_subscribet_to?).and_return(false)
 
-    new_event = DummyEvent.new("a_id","a_value")
+    new_event = DummyEvent.new(aggregate_id: "a_id", a_new_value: "a_value")
 
     SimpleEventSourcing::Events::EventDispatcher.publish(new_event)
     #expect(spy_subscriber).to have_received(:is_subscribet_to?)

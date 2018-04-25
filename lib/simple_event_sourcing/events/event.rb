@@ -2,9 +2,10 @@ module SimpleEventSourcing
   module Events
 
     class Event
-      attr_reader :occured_on
+      attr_reader :aggregate_id, :occured_on
 
-      def initialize
+      def initialize(args)
+        @aggregate_id = args[:aggregate_id]
         @occured_on ||= Time.new
       end
     end

@@ -43,19 +43,19 @@ Here an example of use:
 ```ruby
 class Employee
 
-  include SimpleEventSourcing::AggregateRoot
+  include SimpleEventSourcing::AggregateRoot::Base
 
   attr_reader :name, :title, :salary
 
   def initialize(args = nil )
     super
     unless args.nil?
-      apply_record_event  NewEmployeeIsHiredEvent.new(@aggregate_id, args[:name], args[:title], args[:salary] )
+      apply_record_event  NewEmployeeIsHiredEvent , name: args[:name],  title: args[:title], salary: args[:salary]
     end
   end
 
   def salary=(new_salary)
-    apply_record_event SalaryHasChangedEvent.new(@aggregate_id, new_salary)
+    apply_record_event SalaryHasChangedEvent , new_salary: new_salary
   end
 
   on NewEmployeeIsHiredEvent do |event|
@@ -74,12 +74,13 @@ class Employee
   end
 
 end
+
 ```
 
 First, you must add behaviour including the AggregateRoot module
 
 ```ruby
-  include SimpleEventSourcing::AggregateRoot
+  include SimpleEventSourcing::AggregateRoot::Base
 ```
 
 You must create your own domain events and a event stream
@@ -91,13 +92,24 @@ class EmployeeStreamEvents < SimpleEventSourcing::AggregateRoot::History
   end
 end
 
-class SalaryHasChangedEvent < SimpleEventSourcing::Event
-  attr_reader :aggregate_id, :new_salary
 
-  def initialize(aggregate_id, new_salary)
-    @aggregate_id = aggregate_id
-    @new_salary = new_salary
-    super()
+class NewEmployeeIsHiredEvent < SimpleEventSourcing::Events::Event
+  attr_reader :name, :title,:salary
+
+  def initialize(args)
+    @name = args[:name]
+    @title = args[:title]
+    @salary = args[:salary]
+    super(args)
+  end
+end
+
+class SalaryHasChangedEvent < SimpleEventSourcing::Events::Event
+  attr_reader  :new_salary
+
+  def initialize(args)
+    @new_salary = args[:new_salary]
+    super(args)
   end
 end
 ```
@@ -105,7 +117,7 @@ end
 After that all domain event must be applied and recorded
 
 ```ruby
-apply_record_event SalaryHasChangedEvent.new(@aggregate_id, new_salary)
+apply_record_event SalaryHasChangedEvent , new_salary: new_salary
 ```
 
 SimpleEventSourcing provides a DSL to handle the applied events. You must provide a handler for each event

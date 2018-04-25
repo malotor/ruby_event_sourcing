@@ -5,12 +5,11 @@ class DummyStreamEvents < SimpleEventSourcing::AggregateRoot::History
 end
 
 class DummyEvent < SimpleEventSourcing::Events::Event
-  attr_reader :aggregate_id, :a_new_value
+  attr_reader :a_new_value
 
-  def initialize(aggregate_id, a_new_value)
-    @aggregate_id = aggregate_id
-    @a_new_value = a_new_value
-    super()
+  def initialize(args)
+    @a_new_value = args[:a_new_value]
+    super(args)
   end
 end
 
@@ -38,7 +37,7 @@ class DummyClass
   end
 
   def a_method(a_value)
-    apply_record_event DummyEvent.new(aggregate_id, a_value)
+    apply_record_event DummyEvent, a_new_value: a_value
   end
 
   # def apply_dummy_event(event)
