@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    simple_event_sourcing (0.6.0)
+    simple_event_sourcing (0.7.0)
 
 GEM
   remote: https://rubygems.org/
