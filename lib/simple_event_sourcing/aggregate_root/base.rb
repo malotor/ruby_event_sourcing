@@ -16,10 +16,9 @@ module SimpleEventSourcing
       end
 
       def publish_events
-        @events.each do |event|
-          yield(event)
-        end
+        published_events = @events
         clear_events
+        published_events
       end
 
       def handle_message(message)
