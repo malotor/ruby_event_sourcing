@@ -7,15 +7,6 @@ module SimpleEventSourcing
         @aggregate_id = aggregate_id
       end
 
-      def get_aggregate
-        aggregate = get_aggregate_class.create_from_agrregate_id @aggregate_id
-        each { |event| aggregate.handle_message event }
-        aggregate
-      end
-
-      def get_aggregate_class
-        raise StandardError('Method must be implemented')
-      end
     end
   end
 end

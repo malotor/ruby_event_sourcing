@@ -39,6 +39,12 @@ module SimpleEventSourcing
           aggregate
         end
 
+        def create_from_history(history)
+          aggregate = self.create_from_agrregate_id history.aggregate_id
+          history.each { |event| aggregate.handle_message event }
+          aggregate
+        end
+
         def on(*message_classes, &block)
           message_classes.each { |message_class| message_mapping[message_class] = block }
         end

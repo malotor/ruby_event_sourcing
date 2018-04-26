@@ -8,7 +8,7 @@ RSpec.describe SimpleEventSourcing::Events::Event do
   end
 
   it 'has a occured on date' do
-    expect(@dummy_evet.occured_on).not_to be nil
+    expect(@dummy_evet.occurred_on).not_to be nil
   end
 
   it 'has a aggregate_id on date' do

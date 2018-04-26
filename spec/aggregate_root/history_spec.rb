@@ -2,10 +2,10 @@ RSpec.describe SimpleEventSourcing::AggregateRoot::History do
 
   before(:each) do
     aggregate_id = SimpleEventSourcing::Id::UUIDId.new '4bb20d71-3002-42ea-9387-38d6838a2cb7'
-    stream_events = DummyStreamEvents.new(aggregate_id)
+    stream_events = SimpleEventSourcing::AggregateRoot::History.new(aggregate_id)
     stream_events << DummyEvent.new(aggregate_id: aggregate_id, a_new_value: 10, other_value: 30)
     stream_events << DummyEvent.new(aggregate_id: aggregate_id, a_new_value: 20, other_value: 55)
-    @aggregate = stream_events.get_aggregate
+    @aggregate = DummyClass.create_from_history stream_events
   end
 
   it 'is reconstruct an aggregate by a stream events' do
