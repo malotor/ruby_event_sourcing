@@ -26,10 +26,9 @@ RSpec.describe SimpleEventSourcing::Events::EventDispatcher do
     new_event = DummyEvent.new(aggregate_id: "a_id", a_new_value: "a_value")
 
     SimpleEventSourcing::Events::EventDispatcher.publish(new_event)
-    #expect(spy_subscriber).to have_received(:is_subscribet_to?)
     expect(spy_subscriber).to have_received(:handle)
 
-    expect(spy_second_subscriber).not_to have_received(:handle)
+    expect(spy_second_subscriber).not_to have_received(:handle).with(new_event)
   end
 
 
