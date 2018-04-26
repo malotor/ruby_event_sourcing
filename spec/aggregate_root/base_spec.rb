@@ -61,5 +61,19 @@ RSpec.describe SimpleEventSourcing::AggregateRoot::Base do
     expect(@dummy_class.events.count).to eq(0)
   end
 
+  it 'is reconstructed by a events history' do
+
+    aggregate_id = SimpleEventSourcing::Id::UUIDId.new '4bb20d71-3002-42ea-9387-38d6838a2cb7'
+    stream_events = SimpleEventSourcing::AggregateRoot::History.new(aggregate_id)
+    stream_events << DummyEvent.new(aggregate_id: aggregate_id, a_new_value: 10, other_value: 30)
+    stream_events << DummyEvent.new(aggregate_id: aggregate_id, a_new_value: 20, other_value: 55)
+    @aggregate = DummyClass.create_from_history stream_events
+
+    expect(@aggregate.aggregate_id.to_s).to eq('4bb20d71-3002-42ea-9387-38d6838a2cb7')
+    expect(@aggregate.a_field).to eq(20)
+    expect(@aggregate.other_field).to eq(55)
+    expect(@aggregate.have_changed?).to be false
+  end
+
 
 end
