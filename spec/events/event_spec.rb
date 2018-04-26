@@ -7,7 +7,7 @@ RSpec.describe SimpleEventSourcing::Events::Event do
     )
   end
 
-  it 'has a occured on date' do
+  it 'has a occurred on date' do
     expect(@dummy_event.occurred_on).not_to be nil
   end
 
