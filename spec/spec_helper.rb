@@ -3,6 +3,7 @@ require "simplecov"
 require "simple_event_sourcing"
 require "helpers/uuid_helper"
 require "support/dummy"
+require "timecop"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

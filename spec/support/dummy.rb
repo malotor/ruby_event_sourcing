@@ -12,6 +12,12 @@ class DummyEvent < SimpleEventSourcing::Events::Event
     @other_value = args[:other_value]
     super(args)
   end
+
+  def serialize
+    super.merge("a_new_value" => a_new_value, "other_value" => other_value  )
+  end
+
+
 end
 
 class DummyEventSubscriber < SimpleEventSourcing::Events::EventSubscriber

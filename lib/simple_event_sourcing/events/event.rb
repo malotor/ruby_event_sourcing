@@ -6,7 +6,15 @@ module SimpleEventSourcing
 
       def initialize(args)
         @aggregate_id = args[:aggregate_id]
-        @occurred_on ||= Time.new
+        @occurred_on ||= Time.now.getlocal("+02:00").to_i
+      end
+
+      def serialize
+        {"aggregate_id" => aggregate_id.to_s, "occurred_on" => occurred_on }
+      end
+
+      def to_json(*a)
+        serialize.to_json(*a)
       end
     end
   end
