@@ -1,15 +1,16 @@
 module SimpleEventSourcing
   module Events
-    class EventStore
+    module EventStore
+      class EventStoreBase
 
-      def commit(event)
-        raise StandardError "This methid must be implemented"
-      end
+        def commit(event)
+          raise StandardError "This methid must be implemented"
+        end
 
-      def get_history(aggregate_id)
-        raise StandardError "This methid must be implemented"
+        def get_history(aggregate_id)
+          raise StandardError "This methid must be implemented"
+        end
       end
     end
-
   end
 end

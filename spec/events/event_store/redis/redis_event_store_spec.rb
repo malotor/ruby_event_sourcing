@@ -1,9 +1,8 @@
 RSpec.describe "An event store" do
 
   before(:each) do
-
-    @redis_client = RedisClientMock.new
-    @event_store = RedisEventStore.new(@redis_client)
+    @redis_client = SimpleEventSourcing::Events::EventStore::RedisClientMock.new
+    @event_store = SimpleEventSourcing::Events::EventStore::RedisEventStore.new(@redis_client)
   end
 
   it 'persist an event an aggregate from its id' do

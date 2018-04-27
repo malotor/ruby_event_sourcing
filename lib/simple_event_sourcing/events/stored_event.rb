@@ -1,3 +1,5 @@
+require 'json'
+
 module SimpleEventSourcing
   module Events
 
