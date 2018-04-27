@@ -5,20 +5,22 @@ DISCLAIMER
 
 This gem is under development. DO NOT USE IN PRODUCTION ENVIRONMENT!!!!
 
+>The fundamental idea of Event Sourcing is that of ensuring every change to the state of an application is captured in an event object, and that these event objects are themselves stored in the sequence they were applied for the same lifetime as the application state itself.
+>
+>Martin Fowler , [https://martinfowler.com/eaaDev/EventSourcing.html](https://martinfowler.com/eaaDev/EventSourcing.html)
 
-The fundamental idea of Event Sourcing is that of ensuring every change to the state of an application is captured in an event object, and that these event objects are themselves stored in the sequence they were applied for the same lifetime as the application state itself.
+This gem provides a simple way of adding event sourcing behaviour to your models class.
 
-Martin Fowler , https://martinfowler.com/eaaDev/EventSourcing.html
-
-This gem provides a simple way for add events sourcing related behaviour to your models class.
-
-Base classes
+You could find this base classes:
 
 - AggregateRoot
-- UUID Id
+- Id
+- History
 - Event
-- EventStream
 - EventDispatcher
+- EventSubscriber
+- StoredEvent
+- RedisEventStore
 
 ## Installation
 
@@ -38,7 +40,7 @@ Or install it yourself as:
 
 ## Usage
 
-Here an example of use:
+Firts of all, you must add "event sourcing" behaviour to your model including the AggregateRoot Base Module
 
 ```ruby
 class Employee
@@ -58,6 +60,10 @@ class Employee
     apply_record_event SalaryHasChangedEvent , new_salary: new_salary
   end
 
+  def id
+    aggregate_id.to_s
+  end
+
   on NewEmployeeIsHiredEvent do |event|
     @name = event.name
     @title = event.title
@@ -68,76 +74,69 @@ class Employee
     @salary = event.new_salary
   end
 
-  def save
-    # Persist the entity
-    publish_events { |event| SimpleEventSourcing::Events::EventDispatcher.publish(event) }
-  end
-
 end
 
 ```
 
-First, you must add behaviour including the AggregateRoot module
+You must create your own domain events
 
 ```ruby
-  include SimpleEventSourcing::AggregateRoot::Base
-```
 
-You must create your own domain events and a event stream
-
-```ruby
-class EmployeeStreamEvents < SimpleEventSourcing::AggregateRoot::History
-  def get_aggregate_class
-    Employee
-  end
-end
-
-
-class NewEmployeeIsHiredEvent < SimpleEventSourcing::Events::Event
-  attr_reader :name, :title,:salary
-
-  def initialize(args)
-    @name = args[:name]
-    @title = args[:title]
-    @salary = args[:salary]
-    super(args)
-  end
-end
-
-class SalaryHasChangedEvent < SimpleEventSourcing::Events::Event
+class SalaryHasChangedEvent  < SimpleEventSourcing::Events::Event
   attr_reader  :new_salary
 
   def initialize(args)
     @new_salary = args[:new_salary]
     super(args)
   end
+
+  def serialize
+    super.merge("new_salary" => new_salary)
+  end
+
 end
+
 ```
 
-After that all domain event must be applied and recorded
+After that, we must provide a handle in the out model for all domain event. SimpleEventSourcing provides a DSL to handle the applied events. You must provide a handler for each event
+
+```ruby
+  on SalaryHasChangedEvent do |event|
+    @salary = event.new_salary
+  end
+```
+
+Now you could apply and record events.
 
 ```ruby
 apply_record_event SalaryHasChangedEvent , new_salary: new_salary
 ```
 
-SimpleEventSourcing provides a DSL to handle the applied events. You must provide a handler for each event
-
+Once you persist the entity you must store and publish all recorded events.
 ```ruby
-on SalaryHasChangedEvent do |event|
-  @salary = event.new_salary
-end
-```
-
-Once you persist the entity you must publish all recorded events.
-
-```ruby
-  def save
-    # Persist the entity
-    publish_events { |event| SimpleEventSourcing::EventDispatcher.publish(event) }
+class EmployeeRepository
+  def initialize(event_store)
+    @event_store = event_store
   end
+
+  def save(employee)
+    employee.events.each do |event|
+      @event_store.commit event
+      SimpleEventSourcing::Events::EventDispatcher.publish(event)
+    end
+  end
+
+  def findById(id)
+    history = @event_store.get_history id
+    return Employee.create_from_history history
+  end
+end
+
 ```
 
-You could see this example in https://github.com/malotor/simple_event_sourcing_example
+This gem provides a Redis Event Store or if you want, you could create your own usign "EventStoreBase" interface.
+
+You could see this example running in  https://github.com/malotor/simple_event_sourcing_example
 
 Happy coding!
 
