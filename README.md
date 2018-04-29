@@ -121,7 +121,7 @@ class EmployeeRepository
   end
 
   def save(employee)
-    employee.events.each do |event|
+    employee.publish_events.each do |event|
       @event_store.commit event
       SimpleEventSourcing::Events::EventDispatcher.publish(event)
     end
