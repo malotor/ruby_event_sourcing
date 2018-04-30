@@ -15,7 +15,7 @@ module SimpleEventSourcing
         (@events.count > 0)
       end
 
-      def publish_events
+      def publish
         published_events = @events
         clear_events
         published_events
@@ -24,6 +24,13 @@ module SimpleEventSourcing
       def handle_message(message)
         handler = self.class.message_mapping[message.class]
         self.instance_exec(message, &handler) if handler
+      end
+
+      def apply_record_event(event_class, args = {})
+        args[:aggregate_id] ||= aggregate_id
+        event = event_class.new(args)
+        handle_message(event)
+        record_event event
       end
 
       def self.included(o)
@@ -57,14 +64,11 @@ module SimpleEventSourcing
         end
       end
 
+
+
       private
 
-        def apply_record_event(event_class, args = {})
-          args[:aggregate_id] ||= aggregate_id
-          event = event_class.new(args)
-          handle_message(event)
-          record_event event
-        end
+
 
         def record_event(event)
           @events << event
