@@ -4,13 +4,13 @@ module SimpleEventSourcing
 
   module Id
 
+
+
     class BaseId
+      attr_reader :value
+
       def initialize(value)
         @value = value
-      end
-
-      def id
-        @value
       end
 
       def to_s
@@ -18,7 +18,7 @@ module SimpleEventSourcing
       end
 
       def ==(other_id)
-        self.class == other_id.class && @value == other_id.id
+        self.class == other_id.class && @value == other_id.value
       end
 
       alias eql? ==

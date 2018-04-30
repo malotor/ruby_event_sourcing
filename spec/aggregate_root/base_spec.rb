@@ -5,6 +5,7 @@ RSpec.describe SimpleEventSourcing::AggregateRoot::Base do
 
   it 'have a UUID aggregate Id' do
     expect(uuid_valid?(@dummy_class.aggregate_id)).to_not be_nil
+    expect(@dummy_class.id).to be_a String
   end
 
   it 'new instances has no recorded events' do

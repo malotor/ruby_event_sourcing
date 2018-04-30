@@ -8,6 +8,7 @@ RSpec.describe SimpleEventSourcing::Id::UUIDId do
     aggregate_id = SimpleEventSourcing::Id::UUIDId.new 'cd2d7408-e230-49fa-a22b-51a004ecbec0'
     expect(uuid_valid?(aggregate_id.to_s)).not_to be nil
     expect(aggregate_id.to_s).to eq('cd2d7408-e230-49fa-a22b-51a004ecbec0')
+    expect(aggregate_id.value).to eq('cd2d7408-e230-49fa-a22b-51a004ecbec0')
   end
 
   it 'is fails if  string is no valid  UUID' do
