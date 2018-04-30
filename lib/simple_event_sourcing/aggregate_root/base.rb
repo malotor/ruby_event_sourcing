@@ -4,7 +4,6 @@ module SimpleEventSourcing
     module Base
 
       attr_accessor :aggregate_id
-      attr_reader :events
 
       def initialize(_args = nil)
         @events = []
@@ -21,15 +20,15 @@ module SimpleEventSourcing
         published_events
       end
 
-      def handle_message(message)
-        handler = self.class.message_mapping[message.class]
-        self.instance_exec(message, &handler) if handler
+      def apply_event(event)
+        handler = self.class.event_mapping[event.class]
+        self.instance_exec(event, &handler) if handler
       end
 
       def apply_record_event(event_class, args = {})
         args[:aggregate_id] ||= aggregate_id
         event = event_class.new(args)
-        handle_message(event)
+        apply_event event
         record_event event
       end
 
@@ -47,28 +46,24 @@ module SimpleEventSourcing
 
         def create_from_history(history)
           aggregate = self.create_from_agrregate_id history.aggregate_id
-          history.each { |event| aggregate.handle_message event }
+          history.each { |event| aggregate.apply_event event }
           aggregate
         end
 
         def on(*message_classes, &block)
-          message_classes.each { |message_class| message_mapping[message_class] = block }
+          message_classes.each { |message_class| event_mapping[message_class] = block }
         end
 
-        def message_mapping
-          @message_mapping ||= {}
+        def event_mapping
+          @event_mapping ||= {}
         end
 
-        def handles_message?(message)
-          message_mapping.keys.include? message.class
+        def handles_event?(event)
+          event_mapping.keys.include? event.class
         end
       end
 
-
-
       private
-
-
 
         def record_event(event)
           @events << event
@@ -77,8 +72,6 @@ module SimpleEventSourcing
         def clear_events
           @events = []
         end
-
-
     end
   end
 end
