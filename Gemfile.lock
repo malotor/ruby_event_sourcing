@@ -2,13 +2,13 @@ PATH
   remote: .
   specs:
     simple_event_sourcing (0.8.0)
+      redis
 
 GEM
   remote: https://rubygems.org/
   specs:
     diff-lcs (1.3)
     docile (1.3.0)
-    facets (3.1.0)
     json (2.1.0)
     rake (10.5.0)
     redis (4.0.1)
@@ -37,9 +37,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.16)
-  facets
   rake (~> 10.0)
-  redis
   rspec (~> 3.0)
   simple_event_sourcing!
   simplecov
