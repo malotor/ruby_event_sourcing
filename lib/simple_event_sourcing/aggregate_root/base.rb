@@ -32,6 +32,10 @@ module SimpleEventSourcing
         record_event event
       end
 
+      def id
+        @aggregate_id.value
+      end
+
       def self.included(o)
         o.extend(ClassMethods)
       end
