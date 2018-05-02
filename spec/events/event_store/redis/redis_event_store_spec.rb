@@ -7,7 +7,7 @@ RSpec.describe "An event store" do
 
   it 'persist an event an aggregate from its id' do
 
-    event = DummyEvent.new(aggregate_id: "an_id", a_new_value: 44, other_value: 55)
+    event = DummyEvent.new(aggregate_id: '4bb20d71-3002-42ea-9387-38d6838a2cb7', a_new_value: 44, other_value: 55)
 
     @event_store.commit event
 
@@ -21,10 +21,10 @@ RSpec.describe "An event store" do
     @time_now = Time.at(1402358400)
 
     Timecop.freeze(@time_now) do
-      @event_store.commit DummyEvent.new(aggregate_id: "an_id", a_new_value: 44, other_value: 55)
-      @event_store.commit DummyEvent.new(aggregate_id: "an_id", a_new_value: 22, other_value: 33)
+      @event_store.commit DummyEvent.new(aggregate_id:  '4bb20d71-3002-42ea-9387-38d6838a2cb7', a_new_value: 44, other_value: 55)
+      @event_store.commit DummyEvent.new(aggregate_id:  '4bb20d71-3002-42ea-9387-38d6838a2cb7', a_new_value: 22, other_value: 33)
 
-      event_history = @event_store.get_history "an_id"
+      event_history = @event_store.get_history '4bb20d71-3002-42ea-9387-38d6838a2cb7'
 
       expect(event_history.count).to eq 2
       expect(event_history[0].class).to eq DummyEvent

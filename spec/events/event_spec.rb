@@ -6,7 +6,7 @@ RSpec.describe SimpleEventSourcing::Events::Event do
 
     Timecop.freeze(@time_now) do
       @dummy_event = DummyEvent.new(
-        aggregate_id: SimpleEventSourcing::Id::UUIDId.new('4bb20d71-3002-42ea-9387-38d6838a2cb7'),
+        aggregate_id: '4bb20d71-3002-42ea-9387-38d6838a2cb7',
         a_new_value: 'a new value'
       )
     end
@@ -19,7 +19,7 @@ RSpec.describe SimpleEventSourcing::Events::Event do
   end
 
   it 'has a aggregate_id on date' do
-    expect(@dummy_event.aggregate_id.to_s).to eq('4bb20d71-3002-42ea-9387-38d6838a2cb7')
+    expect(@dummy_event.aggregate_id).to eq('4bb20d71-3002-42ea-9387-38d6838a2cb7')
   end
 
   it 'rails if aggregrate_id is not provided' do

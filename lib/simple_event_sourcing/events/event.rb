@@ -12,7 +12,7 @@ module SimpleEventSourcing
       end
 
       def serialize
-        {"aggregate_id" => aggregate_id.to_s, "occurred_on" => occurred_on }
+        {"aggregate_id" => aggregate_id, "occurred_on" => occurred_on }
       end
 
       def to_json(*a)

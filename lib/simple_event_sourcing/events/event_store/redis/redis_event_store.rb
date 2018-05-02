@@ -12,13 +12,13 @@ module SimpleEventSourcing
         def commit(event)
 
           stored_event = SimpleEventSourcing::Events::StoredEvent.new(
-            aggregate_id: event.aggregate_id.to_s,
+            aggregate_id: event.aggregate_id,
             occurred_on: Time.now.getlocal("+02:00").to_i,
             event_type: event.class.name,
             event_data: event.to_json
           )
 
-          @redis.rpush(event.aggregate_id.to_s, stored_event.to_json )
+          @redis.rpush(event.aggregate_id, stored_event.to_json )
 
         end
 
