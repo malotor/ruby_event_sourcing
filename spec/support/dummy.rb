@@ -30,10 +30,13 @@ class DummyClass
 
   include SimpleEventSourcing::AggregateRoot::Base
 
+  private_class_method :new
+
   attr_accessor :a_field,:other_field
 
   def self.create(a_value, other_value)
-    dummy = self.new
+    dummy = new
+    dummy.aggregate_id = SimpleEventSourcing::Id::UUIDId.generate
     dummy.apply_record_event DummyEvent, a_new_value: a_value, other_value: other_value
     dummy
   end

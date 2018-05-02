@@ -7,11 +7,14 @@ module SimpleEventSourcing
 
       def initialize(_args = nil)
         @events = []
-        @aggregate_id ||= SimpleEventSourcing::Id::UUIDId.generate
       end
 
       def have_changed?
         (@events.count > 0)
+      end
+
+      def count_events
+        @events.count
       end
 
       def publish
@@ -26,7 +29,7 @@ module SimpleEventSourcing
       end
 
       def apply_record_event(event_class, args = {})
-        args[:aggregate_id] ||= aggregate_id
+        args[:aggregate_id] ||= aggregate_id.value
         event = event_class.new(args)
         apply_event event
         record_event event

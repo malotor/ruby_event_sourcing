@@ -4,8 +4,6 @@ module SimpleEventSourcing
 
   module Id
 
-
-
     class BaseId
       attr_reader :value
 
