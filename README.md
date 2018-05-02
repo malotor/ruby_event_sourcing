@@ -20,6 +20,7 @@ You could find this base classes:
 - EventDispatcher
 - EventSubscriber
 - StoredEvent
+- EventStore (Facade)
 - RedisEventStore
 
 ## Installation
@@ -46,6 +47,8 @@ Firts of all, you must add "event sourcing" behaviour to your model including th
 class Employee
 
   include SimpleEventSourcing::AggregateRoot::Base
+
+  private_class_method :new
 
   attr_reader :name, :title, :salary
 

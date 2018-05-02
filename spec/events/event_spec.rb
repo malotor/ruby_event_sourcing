@@ -11,7 +11,6 @@ RSpec.describe SimpleEventSourcing::Events::Event do
       )
     end
 
-
   end
 
   it 'has a occurred on date' do
