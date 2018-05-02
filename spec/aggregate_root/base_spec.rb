@@ -57,7 +57,13 @@ RSpec.describe SimpleEventSourcing::AggregateRoot::Base do
     @dummy_class.a_method(10,30)
     published_events = @dummy_class.publish
     published_events.each { |e| expect(e.aggregate_id).to be @dummy_class.aggregate_id.value }
+  end
 
+  it 'supports several types of id' do
+    other_aggregate = OtherDummyClass.create(10)
+    published_events = other_aggregate.publish
+    published_events.each { |e| expect(e.aggregate_id).to be 1 }
+    expect(other_aggregate.id).to be 1
   end
 
   it 'is reconstructed by a events history' do
