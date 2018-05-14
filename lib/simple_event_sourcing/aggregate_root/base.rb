@@ -47,7 +47,7 @@ module SimpleEventSourcing
 
         def create_from_agrregate_id(id)
           aggregate = new
-          aggregate.aggregate_id = id
+          aggregate.aggregate_id = self.generate_id(id)
           aggregate
         end
 
