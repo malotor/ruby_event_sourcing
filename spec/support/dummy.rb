@@ -50,6 +50,10 @@ class DummyClass
     @other_field = event.other_value
   end
 
+  def self.generate_id(id)
+    SimpleEventSourcing::Id::UUIDId.new id
+  end
+
 end
 
 class OtherDummyEvent < SimpleEventSourcing::Events::Event
