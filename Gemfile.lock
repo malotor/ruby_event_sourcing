@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    simple_event_sourcing (1.0.1)
+    simple_event_sourcing (1.1.0)
       redis
 
 GEM
